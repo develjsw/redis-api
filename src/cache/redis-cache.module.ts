@@ -5,6 +5,7 @@ import { RedisClientOptions } from 'redis';
 import { redisStore } from 'cache-manager-redis-yet';
 import { RedisCacheService } from './servicies/redis-cache.service';
 import { RedisCacheController } from './redis-cache.controller';
+import { CoreRedisCacheService } from './servicies/core-redis-cache.service';
 
 @Global()
 @Module({
@@ -22,7 +23,7 @@ import { RedisCacheController } from './redis-cache.controller';
             })
         })
     ],
-    providers: [RedisCacheService],
+    providers: [CoreRedisCacheService, RedisCacheService],
     exports: [RedisCacheService]
 })
 export class RedisCacheModule {}

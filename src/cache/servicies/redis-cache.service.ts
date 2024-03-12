@@ -1,44 +1,24 @@
-import { Injectable, Inject } from '@nestjs/common';
-import { CACHE_MANAGER } from '@nestjs/cache-manager';
-import { Cache } from 'cache-manager';
+import { Injectable, InternalServerErrorException } from '@nestjs/common';
+import { CoreRedisCacheService } from './core-redis-cache.service';
+import { RedisSetDto } from '../dto/redis-set-dto';
 
 @Injectable()
 export class RedisCacheService {
-    constructor(
-        @Inject(CACHE_MANAGER)
-        private cacheManager: Cache
-    ) {}
+    constructor(private readonly coreRedisCacheService: CoreRedisCacheService) {}
 
-    /**
-     * 캐시 가져오기
-     * @param key
-     */
-    async get(key: string): Promise<any> {
-        return await this.cacheManager.get(key);
+    async getRedisData(key): Promise<object> {
+        return await this.coreRedisCacheService.get(key);
     }
 
-    /**
-     * 캐시 저장
-     * @param key - key
-     * @param value - value
-     * @param option - TTL(Milliseconds) 값으로 optional 매개 변수
-     */
-    async set(key: string, value: any, option?: any): Promise<void> {
-        await this.cacheManager.set(key, value, option);
-    }
-
-    /**
-     * 전체 캐시 삭제
-     */
-    async reset(): Promise<void> {
-        await this.cacheManager.reset();
-    }
-
-    /**
-     * 캐시 항목 삭제
-     * @param key
-     */
-    async del(key: string): Promise<void> {
-        await this.cacheManager.del(key);
+    async setRedisData(redisSetDto: RedisSetDto): Promise<object> {
+        try {
+            await this.coreRedisCacheService.set(redisSetDto.key, redisSetDto.value, redisSetDto.expire);
+            // TODO : 임시로 반환 형식 설정함 - 공통으로 사용 할 모듈 생성 후 적용하기
+            return {
+                message: 'Success'
+            };
+        } catch (error: any) {
+            throw new InternalServerErrorException(error);
+        }
     }
 }
