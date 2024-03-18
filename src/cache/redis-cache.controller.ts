@@ -1,4 +1,4 @@
-import { Body, Controller, Get, Param, Post, UsePipes, ValidationPipe } from '@nestjs/common';
+import { Body, Controller, Delete, Get, Param, Post, UsePipes, ValidationPipe } from '@nestjs/common';
 import { RedisCacheService } from './servicies/redis-cache.service';
 import { RedisSetDto } from './dto/redis-set-dto';
 import { CoreRedisCacheService } from './servicies/core-redis-cache.service';
@@ -19,5 +19,10 @@ export class RedisCacheController {
     @UsePipes(ValidationPipe)
     async setRedisData(@Body() redisSetDto: RedisSetDto) {
         return await this.redisCacheService.setRedisData(redisSetDto);
+    }
+
+    @Delete(':key')
+    async deleteRedisData(@Param('key') key: string) {
+        return await this.redisCacheService.deleteRedisData(key);
     }
 }
