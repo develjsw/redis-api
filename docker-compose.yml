@@ -1,0 +1,26 @@
+version: '3.9'
+
+services:
+  redis-api:
+    image: redis-api:latest
+    build:
+      context: .
+      dockerfile: ./dockerfile/Dockerfile-local
+    ports:
+      - "9001:9001"
+    depends_on:
+      - redis-server
+    environment:
+      - PORT=9001
+      - NODE_ENV=local
+    restart: always
+    networks:
+      - msa-api-network
+
+  redis-server:
+    image: redis:latest
+    ports:
+      - "6379:6379"
+
+networks:
+  msa-api-network:

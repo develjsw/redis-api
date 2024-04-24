@@ -4,7 +4,7 @@ import * as path from 'path';
 const REDIS_HOST = path.resolve('./secret/development/redis-host');
 
 export default () => ({
-    port: parseInt(process.env.PORT, 10) || 9001,
+    //port: parseInt(process.env.PORT, 10) || 9001,
 
     database: {
         redis: {
