@@ -112,5 +112,22 @@ ex)
 - host : localhost,
 - port : 6379
 
+### Redis volume 확인
+~~~
+# docker redis server container 접속
+$ docker exec -it <container_id> bash
+
+# (최초) container 내부에 redis 데이터 저장공간 생성 확인
+$ cd /data
+
+# (최초) host의 redis 데이터 저장공간 생성 확인
+$ cd /d/www/nest-msa-api/redis-data
+
+# redis 데이터 생성 후, docker container/image 삭제 후, docker image 다시 빌드
+$ cd /d/www/nest-msa-api/redis-data
+$ docker-compose up -d --build
+→ dump.rdb라는 파일이 생성됨을 확인
+~~~
+
 ### 컨테이너 오케스트레이션 사용 예정
 (Docker Swarm 또는 Kubernetes)

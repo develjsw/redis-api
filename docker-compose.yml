@@ -8,7 +8,9 @@ services:
       - "6379:6379"
     environment:
       - REDIS_PORT:6379
-    # todo : volume 추가 예정
+    restart: always
+    volumes:
+      - ../redis-data:/data
     networks:
       - msa-api-network
 
