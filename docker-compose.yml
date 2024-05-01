@@ -16,6 +16,7 @@ services:
 
   api:
     image: redis-api:latest
+    container_name: redis-api
     build:
       context: .
       dockerfile: ./dockerfile/Dockerfile-local
