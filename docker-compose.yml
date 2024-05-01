@@ -1,25 +1,25 @@
-version: '3.9'
+version: '3.9' # docker compose version 명시
 
 services:
-  redis:
-    image: redis:latest
-    container_name: redis-server
-    ports:
-      - "6379:6379"
-    environment:
-      - REDIS_PORT:6379
-    restart: always
-    volumes:
-      - ../redis-data:/data
-    networks:
+  redis: # service명
+    image: redis:latest # 최신 이미지 가져와서 빌드 진행하기 위함
+    container_name: redis-server # container 이름 명시
+    ports: # 포트포워딩, 외부에서 내부 컨테이너에 진입하기 위해 사용
+      - "6379:6379" # host port : container port
+    environment: # 환경변수 설정
+      - REDIS_PORT:6379 # process.env.변수명으로 node service에서 사용 가능
+    restart: always # container 자동 재시작
+    volumes: # 데이터 영속성 (컨테이너 종료 및 삭제시에도 데이터 보존), 데이터 공유 (컨테이너 간에 데이터 공유)
+      - ../redis-data:/data # host 폴더 위치 : container 폴더 위치 (폴더 미존재 - 자동 생성)
+    networks: # container 간 통신을 위해 network 설정 (network를 설정하지 않더라도 default로 생성 됨)
       - msa-api-network
 
   api:
     image: redis-api:latest
     container_name: redis-api
-    build:
-      context: .
-      dockerfile: ./dockerfile/Dockerfile-local
+    build: # 별도의 내가 만든 dockerfile을 통해 이미지 생성(build)하기 위함
+      context: . # 빌드 명령을 실행할 디렉터리 경로
+      dockerfile: ./dockerfile/Dockerfile-local # 도커 이미지를 빌드하는데 사용할 도커 파일 위치
     ports:
       - "9001:9001"
     environment:
@@ -27,8 +27,8 @@ services:
       - NODE_ENV=local
       - REDIS_HOST_ENV=redis
     restart: always
-    depends_on:
-      - redis
+    depends_on: # 의존 관계 설정 (해당 service보다 선행되야 할 작업 설정)
+      - redis # service명으로 표시
     networks:
       - msa-api-network
 
