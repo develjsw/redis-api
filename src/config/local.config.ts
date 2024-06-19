@@ -1,7 +1,7 @@
 import * as fs from 'fs';
 import * as path from 'path';
 
-const REDIS_HOST = path.resolve('./secret/development/redis-host');
+const REDIS_HOST = path.resolve('./secret/local/redis-host');
 
 export default () => ({
     port: parseInt(process.env.PORT, 10) || 9001,
